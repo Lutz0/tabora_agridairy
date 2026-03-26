@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Add Health Record - Tabora AgriDairy{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Add Health Record</h2>
+    <a href="{{ url_for('health.list_health_records') }}" class="btn btn-outline-secondary">View Records</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="cow_id">Cow *</label>
+                    <select class="form-select" id="cow_id" name="cow_id" required>
+                        <option value="">Select cow</option>
+                        {% for cow in cows %}
+                        <option value="{{ cow.id }}">{{ cow.tag_number }} ({{ cow.breed }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="date">Date *</label>
+                    <input class="form-control" type="date" id="date" name="date" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="disease">Disease *</label>
+                    <input class="form-control" type="text" id="disease" name="disease" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="treatment">Treatment *</label>
+                    <textarea class="form-control" id="treatment" name="treatment" rows="3" required></textarea>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success">Save Record</button>
+                <a href="{{ url_for('health.list_health_records') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

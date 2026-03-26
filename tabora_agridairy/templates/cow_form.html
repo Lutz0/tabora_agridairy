@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}{{ 'Edit Cow' if cow else 'Add Cow' }} - Tabora AgriDairy{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{{ 'Edit Cow' if cow else 'Add Cow' }}</h2>
+    <a href="{{ url_for('cow.list_cows') }}" class="btn btn-outline-secondary">Back to List</a>
+</div>
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="tag_number" class="form-label">Tag Number *</label>
+                    <input type="text" class="form-control" id="tag_number" name="tag_number" required
+                           value="{{ cow.tag_number if cow else '' }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="breed" class="form-label">Breed *</label>
+                    <input type="text" class="form-control" id="breed" name="breed" required
+                           value="{{ cow.breed if cow else '' }}" placeholder="e.g. Holstein">
+                </div>
+                <div class="col-md-6">
+                    <label for="age" class="form-label">Age (years) *</label>
+                    <input type="number" class="form-control" id="age" name="age" min="0" required
+                           value="{{ cow.age if cow else '' }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="Healthy" {{ 'selected' if cow and cow.health_status == 'Healthy' else '' }}>Healthy</option>
+                        <option value="Sick" {{ 'selected' if cow and cow.health_status == 'Sick' else '' }}>Sick</option>
+                        <option value="Sold" {{ 'selected' if cow and cow.health_status == 'Sold' else '' }}>Sold</option>
+                        <option value="Under Treatment" {{ 'selected' if cow and cow.health_status == 'Under Treatment' else '' }}>Under Treatment</option>
+                        <option value="Recovering" {{ 'selected' if cow and cow.health_status == 'Recovering' else '' }}>Recovering</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">{{ 'Update' if cow else 'Add' }} Cow</button>
+                <a href="{{ url_for('cow.list_cows') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

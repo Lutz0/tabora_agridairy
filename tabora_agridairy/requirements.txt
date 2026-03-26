@@ -1,0 +1,10 @@
+# Tabora AgriDairy Management System
+# Python dependencies
+
+Flask>=3.0.0
+Flask-SQLAlchemy>=3.1.1
+Flask-Login>=0.6.3
+Flask-Migrate>=4.0.5
+PyMySQL>=1.1.0
+Werkzeug>=3.0.0
+gunicorn>=22.0.0

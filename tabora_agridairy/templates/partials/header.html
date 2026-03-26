@@ -1,0 +1,37 @@
+{# Reusable top header #}
+<header class="app-header" role="banner">
+  <div class="app-header__left">
+    <button class="btn app-icon-btn d-lg-none" type="button" data-sidebar-open aria-label="Open sidebar">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <form class="app-search d-none d-md-flex" role="search" onsubmit="return false;">
+      <i class="bi bi-search app-search__icon"></i>
+      <input class="form-control app-search__input" type="search" placeholder="Search farmers, payments, inventory..." aria-label="Search">
+      <span class="app-search__hint">Ctrl K</span>
+    </form>
+  </div>
+
+  <div class="app-header__right">
+    <button class="btn app-icon-btn position-relative" type="button" aria-label="Notifications">
+      <i class="bi bi-bell"></i>
+      {# Example indicator; wire to real notifications later #}
+      <span class="app-dot" aria-hidden="true"></span>
+    </button>
+
+    <div class="dropdown">
+      <button class="btn app-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="app-profile-btn__avatar"><i class="bi bi-person-circle"></i></span>
+        <span class="d-none d-sm-inline">{{ current_user.username }}</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+        <li><h6 class="dropdown-header">{{ current_user.role|capitalize }}</h6></li>
+        <li><a class="dropdown-item" href="#" data-disabled-link><i class="bi bi-person me-2"></i>Profile (Soon)</a></li>
+        <li><a class="dropdown-item" href="{{ url_for('settings.settings') }}"><i class="bi bi-gear me-2"></i>Settings</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+

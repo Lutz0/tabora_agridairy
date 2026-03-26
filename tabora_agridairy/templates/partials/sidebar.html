@@ -1,0 +1,88 @@
+{# Reusable sidebar navigation #}
+<nav class="app-sidebar" id="appSidebar" aria-label="Sidebar navigation">
+  <div class="app-sidebar__brand">
+    <div class="app-sidebar__logo">
+      <i class="bi bi-tree-fill"></i>
+    </div>
+    <div class="app-sidebar__brand-text">
+      <div class="app-sidebar__title">Tabora Dairy</div>
+      <div class="app-sidebar__subtitle">Farm Management</div>
+    </div>
+    <button class="btn app-sidebar__close d-lg-none" type="button" data-sidebar-close aria-label="Close sidebar">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="app-sidebar__section">
+    <div class="app-sidebar__section-title">Main</div>
+    <ul class="nav flex-column app-nav">
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('dashboard.index') }}">
+          <i class="bi bi-speedometer2 me-2"></i><span>Dashboard</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('cow.list_cows') }}">
+          <i class="bi bi-people me-2"></i><span>Farmers</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('milk.list_records') }}">
+          <i class="bi bi-droplet me-2"></i><span>Milk Collection</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('health.list_health_records') }}">
+          <i class="bi bi-heart-pulse me-2"></i><span>Health Records</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('inventory.list_items') }}">
+          <i class="bi bi-box-seam me-2"></i><span>Inventory</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('payment.list_payments') }}">
+          <i class="bi bi-cash-coin me-2"></i><span>Payments</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('report.index') }}">
+          <i class="bi bi-graph-up-arrow me-2"></i><span>Reports</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="app-sidebar__section mt-auto">
+    <div class="app-sidebar__section-title">System</div>
+    <ul class="nav flex-column app-nav">
+      <li class="nav-item">
+        <a class="nav-link app-nav__link" href="{{ url_for('settings.settings') }}">
+          <i class="bi bi-gear me-2"></i><span>Settings</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link app-nav__link app-nav__link--danger" href="{{ url_for('auth.logout') }}">
+          <i class="bi bi-box-arrow-right me-2"></i><span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="app-sidebar__user">
+    <div class="app-sidebar__avatar">
+      <i class="bi bi-person-circle"></i>
+    </div>
+    <div class="app-sidebar__user-meta">
+      <div class="app-sidebar__user-name">{{ current_user.username }}</div>
+      <div class="app-sidebar__user-role">{{ current_user.role|capitalize }}</div>
+    </div>
+  </div>
+</nav>
+

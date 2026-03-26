@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}{{ 'Edit Milk Record' if record else 'Record Milk' }} - Tabora AgriDairy{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{{ 'Edit Milk Record' if record else 'Record Milk Production' }}</h2>
+    <a href="{{ url_for('milk.list_records') }}" class="btn btn-outline-secondary">Back to List</a>
+</div>
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="cow_id" class="form-label">Cow *</label>
+                    <select class="form-select" id="cow_id" name="cow_id" required>
+                        <option value="">Select cow</option>
+                        {% for c in cows %}
+                        <option value="{{ c.id }}" {{ 'selected' if record and record.cow_id == c.id else '' }}>{{ c.tag_number }} ({{ c.breed }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="date" class="form-label">Date *</label>
+                    <input type="date" class="form-control" id="date" name="date" required
+                           value="{{ record.date.strftime('%Y-%m-%d') if record else (default_date.strftime('%Y-%m-%d') if default_date is defined else '') }}">
+                </div>
+                <div class="col-md-6">
+                    <label for="quantity_liters" class="form-label">Quantity (liters) *</label>
+                    <input type="number" class="form-control" id="quantity_liters" name="quantity_liters" step="0.01" min="0" required
+                           value="{{ record.quantity_liters if record else '' }}">
+                </div>
+                <div class="col-12">
+                    <label for="notes" class="form-label">Notes</label>
+                    <textarea class="form-control" id="notes" name="notes" rows="2">{{ record.notes if record else '' }}</textarea>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">{{ 'Update' if record else 'Save' }} Record</button>
+                <a href="{{ url_for('milk.list_records') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

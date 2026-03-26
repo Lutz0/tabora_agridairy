@@ -1,0 +1,236 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard - Tabora AgriDairy{% endblock %}
+{% block content %}
+<div class="d-flex align-items-start align-items-md-center justify-content-between gap-3 flex-wrap mb-3">
+    <div>
+        <h2 class="mb-1">Dashboard</h2>
+        <div class="text-muted">Overview of farm activity and key operational metrics.</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('cow.add_cow') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>Add Cow
+        </a>
+        <a href="{{ url_for('cow.list_cows') }}" class="btn btn-outline-primary">
+            <i class="bi bi-list-ul me-1"></i>View Cows
+        </a>
+        <a href="{{ url_for('milk.add_record') }}" class="btn btn-success">
+            <i class="bi bi-plus-lg me-1"></i>New Milk Record
+        </a>
+        <a href="{{ url_for('inventory.add_item') }}" class="btn btn-outline-success">
+            <i class="bi bi-box-seam me-1"></i>Add Inventory
+        </a>
+        <a href="{{ url_for('health.list_health_records') }}" class="btn btn-outline-success">
+            <i class="bi bi-heart-pulse me-1"></i>Health Records
+        </a>
+        <a href="{{ url_for('payment.list_payments') }}" class="btn btn-outline-success">
+            <i class="bi bi-cash-coin me-1"></i>Payments
+        </a>
+        <a href="{{ url_for('settings.settings') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-gear me-1"></i>Settings
+        </a>
+    </div>
+</div>
+
+<div class="row g-3 g-lg-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase">Total Farmers</div>
+                        <div class="display-6 fw-bold mb-0">{{ total_farmers }}</div>
+                    </div>
+                    <div class="app-icon-btn" style="border-color: rgba(46,125,50,.2);">
+                        <i class="bi bi-people" style="color: var(--brand);"></i>
+                    </div>
+                </div>
+                <div class="text-muted small mt-2">Active accounts registered in the system.</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase">Milk Collected Today</div>
+                        <div class="display-6 fw-bold mb-0">{{ milk_today }} <span class="fs-6 fw-semibold text-muted">L</span></div>
+                    </div>
+                    <div class="app-icon-btn" style="border-color: rgba(46,125,50,.2);">
+                        <i class="bi bi-droplet" style="color: var(--brand);"></i>
+                    </div>
+                </div>
+                <div class="text-muted small mt-2">Total liters recorded for today.</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase">Monthly Revenue</div>
+                        <div class="display-6 fw-bold mb-0">{{ "%.2f"|format(monthly_revenue) }}</div>
+                    </div>
+                    <div class="app-icon-btn" style="border-color: rgba(46,125,50,.2);">
+                        <i class="bi bi-cash-stack" style="color: var(--brand);"></i>
+                    </div>
+                </div>
+                <div class="text-muted small mt-2">Payments recorded this month.</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small text-uppercase">Inventory Alerts</div>
+                        <div class="display-6 fw-bold mb-0">{{ inventory_alerts }}</div>
+                    </div>
+                    <div class="app-icon-btn" style="border-color: rgba(46,125,50,.2);">
+                        <i class="bi bi-exclamation-triangle" style="color: var(--brand);"></i>
+                    </div>
+                </div>
+                <div class="text-muted small mt-2">Items at or below low stock level.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 g-lg-4 mt-1">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between mb-2">
+                    <div>
+                        <h5 class="mb-1">Milk Collection Trend</h5>
+                        <div class="text-muted small">Last 7 days (liters)</div>
+                    </div>
+                    <a href="{{ url_for('report.index') }}" class="btn btn-sm btn-outline-success">View reports</a>
+                </div>
+                <canvas id="milkTrendChart" height="110" aria-label="Milk collection trend chart" role="img"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between mb-2">
+                    <div>
+                        <h5 class="mb-1">Today’s Milk Records</h5>
+                        <div class="text-muted small">Latest entries (up to 10)</div>
+                    </div>
+                    <a href="{{ url_for('milk.list_records') }}" class="btn btn-sm btn-outline-success">Open</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Cow</th>
+                                <th class="text-end">Liters</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if today_records %}
+                                {% for r in today_records %}
+                                <tr>
+                                    <td class="text-muted">{{ r.date.strftime('%Y-%m-%d') }}</td>
+                                    <td>{{ r.cow.tag_number }}</td>
+                                    <td class="text-end fw-semibold">{{ "%.2f"|format(r.quantity_liters) }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-muted">No milk records for today yet.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3 mt-lg-4">
+    <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between mb-2">
+            <div>
+                <h5 class="mb-1">Recent Payments</h5>
+                <div class="text-muted small">Latest 5 payments</div>
+            </div>
+            <a href="{{ url_for('payment.list_payments') }}" class="btn btn-sm btn-outline-success">Open</a>
+        </div>
+        {% if recent_payments %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Farmer</th>
+                        <th class="text-end">Amount</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in recent_payments %}
+                    <tr>
+                        <td>{{ p.farmer.username }}</td>
+                        <td class="text-end fw-semibold">{{ "%.2f"|format(p.amount) }}</td>
+                        <td class="text-muted">{{ p.payment_date.strftime('%Y-%m-%d') }}</td>
+                        <td class="text-muted">{{ p.description or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-muted">No recent payments.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+    const ctx = document.getElementById('milkTrendChart');
+    if (!ctx) return;
+    const labels = {{ trend_labels | tojson }};
+    const values = {{ trend_values | tojson }};
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Liters',
+                data: values,
+                borderColor: '#2E7D32',
+                backgroundColor: 'rgba(46, 125, 50, 0.12)',
+                fill: true,
+                tension: 0.35,
+                pointRadius: 3,
+                pointHoverRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { mode: 'index', intersect: false }
+            },
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: true }
+            }
+        }
+    });
+})();
+</script>
+{% endblock %}
+

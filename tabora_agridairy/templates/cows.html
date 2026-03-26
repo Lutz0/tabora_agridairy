@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Cows - Tabora AgriDairy{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Cow Management</h2>
+    <a href="{{ url_for('cow.add_cow') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Cow</a>
+</div>
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        {% if cows %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Tag Number</th>
+                        <th>Breed</th>
+                        <th>Age</th>
+                        <th>Health Status</th>
+                        {% if current_user.is_admin() %}<th>Owner</th>{% endif %}
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cow in cows %}
+                    <tr>
+                        <td>{{ cow.tag_number }}</td>
+                        <td>{{ cow.breed }}</td>
+                        <td>{{ cow.age }} yr(s)</td>
+                        <td><span class="badge bg-{{ 'success' if cow.health_status == 'Healthy' else 'warning' }}">{{ cow.health_status }}</span></td>
+                        {% if current_user.is_admin() %}<td>{{ cow.owner.username }}</td>{% endif %}
+                        <td class="text-end">
+                            <a href="{{ url_for('cow.edit_cow', cow_id=cow.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <form action="{{ url_for('cow.delete_cow', cow_id=cow.id) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this cow?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No cows registered. <a href="{{ url_for('cow.add_cow') }}">Add your first cow</a>.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

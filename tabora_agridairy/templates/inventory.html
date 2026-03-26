@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Inventory - Tabora AgriDairy{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Inventory Management</h2>
+    <a href="{{ url_for('inventory.add_item') }}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Item</a>
+</div>
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        {% if items %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Date Added</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.item_name }}</td>
+                        <td><span class="badge bg-secondary">{{ item.category }}</span></td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.unit }}</td>
+                        <td>{{ item.date_added.strftime('%Y-%m-%d') if item.date_added else '-' }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('inventory.edit_item', item_id=item.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <form action="{{ url_for('inventory.delete_item', item_id=item.id) }}" method="post" class="d-inline" onsubmit="return confirm('Delete this item?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No inventory items. <a href="{{ url_for('inventory.add_item') }}">Add an item</a>.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

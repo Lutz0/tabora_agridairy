@@ -1,0 +1,66 @@
+TABORA AGRIDAIRY — DATABASE ERD (TEXT VIEW)
+============================================
+
++------------------+
+|      users       |
++------------------+
+| id (PK)          |
+| username (UK)    |
+| email (UK)       |
+| password_hash    |
+| role             |
++--------+---------+
+         |
+         | 1:N owns
+         v
++------------------+
+|      cows        |
++------------------+
+| id (PK)          |
+| tag_number (UK)  |
+| breed            |
+| age              |
+| health_status    |
+| owner_id (FK) ---+----> users.id
++--------+---------+
+         |
+         | 1:N produces
+         v
++------------------+
+| milk_production  |
++------------------+
+| id (PK)          |
+| cow_id (FK) -----+----> cows.id
+| date             |
+| quantity_liters   |
+| notes            |
++------------------+
+
++------------------+
+|     users        |
++--------+---------+
+         |
+         | 1:N receives
+         v
++------------------+
+|    payments      |
++------------------+
+| id (PK)          |
+| farmer_id (FK) ---+----> users.id
+| amount           |
+| payment_date     |
+| description      |
++------------------+
+
++------------------+
+|    inventory     |   (standalone — no FKs)
++------------------+
+| id (PK)          |
+| item_name        |
+| category         |
+| quantity         |
+| unit             |
+| date_added       |
++------------------+
+
+Legend: PK = Primary Key, UK = Unique Key, FK = Foreign Key, 1:N = One-to-Many
